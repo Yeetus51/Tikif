@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("./partials/head.ejs"); %>
+  <link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body>
+  <main>
+    <% if(currentUser){ %>
+    <div>
+      <h1><%= currentUser.username%></h1>
+      <p>Welcome to templating using EJS</p>
+      <p>There are <%= user_count%> users subscribed.</p>
+      <a href="/awareness"> Awareness</a>
+      <a href="/acceptance"> Acceptance</a>
+      <a href="/adoption"> Adoption</a>
+      <a href="/implementation"> Implementation</a>
+    </div>
+    <% } else{ %>
+    <div>
+      <h1>Please log in</h1>
+        <form action="" method="POST">
+          <div class="input-control">
+            <input type="text" class="input-control-child" name="username" id="username" placeholder="username" />
+          </div>
+          <div class="input-control">
+            <input type="password" class="input-control-child" name="password" id="password" placeholder="password"/>
+          </div>
+          <div class="input-control">
+            <button type="submit" class="input-control-child form-btn">Log In</button>
+          </div>
+          <hr>
+          <div class="md-input-control">
+            <a class="input-control-child form-btn" href="/sign_up">Create new account</a>
+          </div>
+        </form>
+    </div>
+    <% } %>
+  </main>
+</body>
+</html>
