@@ -53,15 +53,4 @@ router.get("/logout", (req, res, next) => {
 
 
 
-
-// // GET Acceptance Page
-// router.get("/acceptance", acceptance_controller.index);
-
-// // GET Adoption Page
-// router.get("/adoption", adoption_controller.index);
-
-// // GET Implementation Page
-// router.get("/implementation", implementation_controller.index);
-
-
 module.exports = router;

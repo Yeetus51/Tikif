@@ -7,15 +7,9 @@
 <body>
   <main>
     <% if(currentUser){ %>
-    <div>
-      <h1><%= currentUser.username%></h1>
-      <p>Welcome to templating using EJS</p>
-      <p>There are <%= user_count%> users subscribed.</p>
-      <a href="/awareness"> Awareness</a>
-      <a href="/acceptance"> Acceptance</a>
-      <a href="/adoption"> Adoption</a>
-      <a href="/implementation"> Implementation</a>
-    </div>
+      <script>
+        window.location.href = "/main";
+      </script>
     <% } else{ %>
     <div>
       <h1>Please log in</h1>

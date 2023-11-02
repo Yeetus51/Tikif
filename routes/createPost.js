@@ -10,5 +10,11 @@ const createPostController = require("../controllers/createPostController");
 /* GET home page. */
 router.get('/', createPostController.index);
 
+// POST Search Request
+router.post("/", createPostController.search);
+
+//GET Search Results Page
+router.get("/results/:query", createPostController.results)
+
 
 module.exports = router;

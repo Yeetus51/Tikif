@@ -12,9 +12,9 @@ const GifSchema = new Schema({
     comments: [{
         key:{type: mongoose.Types.ObjectId},
         value:{type: String}
-    }]
+    }],
+    viwers: [{type: mongoose.Types.ObjectId}]
 });
-
 
 GifSchema.virtual("appendedVariable").get(()=>{
     // use this. notation 

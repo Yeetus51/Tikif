@@ -1,0 +1,12 @@
+<h1>SHeeshh</h1>
+<p><%= input %></p>
+
+<p> <%= results[0].data[0].images.original.url %></p>
+
+<% for(var i=0; i<results[0].data.length; i++) {%>
+
+    <!-- <img src=<%= results[0].data[i].images.original.url %> alt=""> -->
+
+    <img src=<%= results[0].data[i].images.fixed_height.url %> alt="">
+
+<% }; %>
