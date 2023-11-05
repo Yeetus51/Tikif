@@ -1,12 +1,65 @@
 <h1>SHeeshh</h1>
 <p><%= input %></p>
 
-<p> <%= results[0].data[0].images.original.url %></p>
+<div id="results">
+    <% for(var i=0; i<results.length; i++) {%>
 
-<% for(var i=0; i<results[0].data.length; i++) {%>
+        <img src=<%= results[i].url %> id=<%= results[i].id %> onclick="ChooseGif(this)" alt="">
 
-    <!-- <img src=<%= results[0].data[i].images.original.url %> alt=""> -->
+    <% }; %>
+</div>
+<button id="more_button" onclick="loadMore()">More</button>
 
-    <img src=<%= results[0].data[i].images.fixed_height.url %> alt="">
 
-<% }; %>
+<script type="text/javascript">
+    let offset = <%= offset %>; 
+    let query = "<%= input %>"; 
+
+    function loadMore(){
+        let xhr = new XMLHttpRequest(); 
+        xhr.open("GET","?offset=" + offset, true); 
+
+        xhr.onload = function() {
+            if(this.status === 200){
+                console.log(this.responseText);
+                let results = JSON.parse(this.responseText); 
+                let container = document.getElementById("results"); 
+                for(let i =0; i < results.length; i++){
+                    let img = new Image(); 
+                    img.src = results[i].url;
+                    img.id = results[i].id;
+                    img.addEventListener("click", () => ChooseGif(img));
+                    container.appendChild(img); 
+                }
+                offset += 12;
+            }
+            else{
+                console.error("Error fetching more results" + this.status); 
+            }
+        }
+        xhr.send(); 
+    }
+
+    function ChooseGif(img){
+
+        let xhr = new XMLHttpRequest(); 
+        xhr.open("POST", "?gif_id=" + img.id); 
+        xhr.onload = function() {
+            // Check if the request was successful
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // Perform the redirect using `window.location`
+                window.location.href = `../post/${img.id}`;
+            } else {
+                // Handle errors, if any
+                console.error('The request failed!');
+            }
+        };
+
+        xhr.send(); 
+    }
+
+
+</script>
+
+
+

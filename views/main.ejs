@@ -9,6 +9,14 @@
     <main>
         <h1>Main Page</h1>
 
+        <% for(let i =0; i < results.length; i++) { %>
+            <div>
+                <img src=<%= results[i].url %> id=<%= results[i].id %> alt="">
+                <p> <%= results[i].title %></p>
+            </div>
+        <% } %>
+
+
     </main>
     <footer><%- include("./partials/footer.ejs") %></footer>
 </body>
