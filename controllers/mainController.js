@@ -4,16 +4,36 @@ const mongoose = require("mongoose");
 const Gif = require("../models/gif"); 
 const Post = mongoose.model('gifs',Gif.schema);
 
+
+
+function getRandomIntInRange(x, y) {
+    if (x > y) {
+      // Swap x and y if x is greater than y
+      [x, y] = [y, x];
+    }
+    // Calculate the random integer within the range
+    return Math.floor(Math.random() * (y - x + 1)) + x;
+  }
+
+
 exports.index = asyncHandler(async (req, res, next) => {
 
 
     try {
-        const result = await Post.find(); // This will find all documents in the posts collection
+
+        const resultLimit = 50; 
+        const result = await Post.find().sort({date_posted:-1}).limit(resultLimit); // This will find all documents in the posts collection
         
-        console.log(result);
 
         let gifData = result.map(item => ({ gif_id: item.gif_id, title: item.title }));
-        console.log(gifData);
+
+        if(gifData.length >= 10){
+            for (let i = 0; i < result.length - 10; i++){
+                const random = getRandomIntInRange(0,gifData.length-1);
+                gifData.splice(random,1);
+            }
+        }
+
         let promises = []; 
         const apiKey = process.env.GIHPY_KEY;
         const baseUrl = 'https://api.giphy.com/v1/gifs/';
@@ -46,8 +66,6 @@ exports.index = asyncHandler(async (req, res, next) => {
                 console.error("Error in Promise.all: ", error);
                 return []; // Return an empty array or handle as needed
             });
-
-        console.log(gifResults);
 
         res.render("main", {
             results: gifResults 

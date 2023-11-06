@@ -6,7 +6,6 @@ const User = require("./models/user");
 passport.use(
     new LocalStrategy(async (username, password, done) => {
         try{
-            console.log("THIs Shit works ");
             const user = await User.findOne({ username: username}).exec();
 
             if(!user) return done(null, false, { message: "Incorrect username"});
@@ -15,7 +14,6 @@ passport.use(
 
             if(!match) return done(null, false, { message: "Incorrect password"} );
 
-            console.log("Done auth");
             return done(null, user);
 
         } catch(error)

@@ -30,7 +30,8 @@ router.post("/sign_up", async (req, res, next) => {
       const newUser = new User({
         display_name: req.body.display_name,
         username: req.body.username,
-        password: hashedPassword
+        password: hashedPassword,
+        date_created: new Date()
       });
 
       await newUser.save();

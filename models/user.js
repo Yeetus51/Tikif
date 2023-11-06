@@ -14,7 +14,8 @@ const UserSchema = new Schema({
         key:{type:String},
         value:{type:mongoose.Types.Decimal128}
     }],
-    gif_posts: [{type:mongoose.Types.ObjectId}]
+    gif_posts: [{type:mongoose.Types.ObjectId}],
+    date_created: {type: Date}
 });
 
 

@@ -105,7 +105,7 @@ exports.postCreated = asyncHandler(async (req, res, next) => {
             gif_id: req.body.gif_id,
             title: req.body.gif_title, // assuming title is passed in request body
             tags: ["Some", "Hash", "tags"], // assuming tags is an array passed in request body
-            // Initialize other fields as needed, like likes, comments, viewers
+            date_posted: new Date()            // Initialize other fields as needed, like likes, comments, viewers
         });
 
         // Save the new Gif to the database

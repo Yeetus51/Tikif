@@ -15,7 +15,8 @@ const GifSchema = new Schema({
         key:{type: mongoose.Types.ObjectId},
         value:{type: String}
     }],
-    viewers: [{type: mongoose.Types.ObjectId}]
+    viewers: [{type: mongoose.Types.ObjectId}],
+    date_posted: {type: Date}
 });
 
 GifSchema.virtual("appendedVariable").get(()=>{
