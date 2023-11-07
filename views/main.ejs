@@ -10,14 +10,47 @@
         <h1>Main Page</h1>
 
         <% for(let i =0; i < results.length; i++) { %>
-            <div>
+            <div name="gif_viewer" hidden="true">
                 <img src=<%= results[i].url %> id=<%= results[i].id %> alt="">
                 <p> <%= results[i].title %></p>
             </div>
         <% } %>
 
+        <button id="previous" type="button">PREVIOUS</button>
+        <button id="next" type="button">NEXT</button>
+
 
     </main>
     <footer><%- include("./partials/footer.ejs") %></footer>
+
+    <script>
+        let allGifs = document.getElementsByName("gif_viewer"); 
+        let activeIndex = 0; 
+
+        allGifs[0].removeAttribute("hidden");
+
+        let PreviousButton = document.getElementById("previous");
+        let NextButton = document.getElementById("next");
+
+        PreviousButton.addEventListener("click", () =>{
+            if(activeIndex > 0){
+                allGifs[activeIndex].setAttribute("hidden", true); 
+                activeIndex--; 
+                allGifs[activeIndex].removeAttribute("hidden");
+            }
+        });
+
+        NextButton.addEventListener("click", () =>{
+            if(activeIndex < allGifs.length-1){
+                allGifs[activeIndex].setAttribute("hidden", true); 
+                activeIndex++; 
+                allGifs[activeIndex].removeAttribute("hidden");
+            }
+        });
+
+
+
+
+    </script>
 </body>
 </html>
