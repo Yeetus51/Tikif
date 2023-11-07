@@ -13,7 +13,8 @@
             <% for(let i =0; i < results.length; i++) { %>
                 <div name="gif_viewer" hidden="true">
                     <img src=<%= results[i].url %> id=<%= results[i].id %> alt="">
-                    <p name="title"> <%= results[i].title %></p>
+                    <p name="username" class="username"> <%= `${results[i].username?results[i].username:"unknown"} posted` %></p>
+                    <p name="title" class="title"> <%= results[i].title %></p>
                 </div>
             <% } %>
         </div>
@@ -69,7 +70,8 @@
                     newGif.setAttribute("hidden", true); 
                     newGif.querySelector("img").setAttribute("id", results[i].id);
                     newGif.querySelector("img").setAttribute("src", results[i].url);
-                    newGif.querySelector("p").textContent = results[i].title; 
+                    newGif.querySelector(".username").textContent = `${results[i].username?results[i].username:"unknown"} posted`; 
+                    newGif.querySelector(".title").textContent = results[i].title; 
 
                     container.appendChild(newGif); 
                     addedGifs.push(newGif);

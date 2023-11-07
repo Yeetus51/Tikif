@@ -2,7 +2,9 @@ const asyncHandler = require("express-async-handler");
 
 const mongoose = require("mongoose");
 const Gif = require("../models/gif"); 
+const UserSchema = require("../models/gif"); 
 const Post = mongoose.model('gifs',Gif.schema);
+const User = mongoose.model('users',UserSchema.schema);
 
 const resultLimit = 10; 
 const sentResults = 5; 
@@ -27,10 +29,19 @@ exports.index = asyncHandler(async (req, res, next) => {
     try {
 
 
-        const result = await Post.find().sort({date_posted:-1}).limit(resultLimit);
+        const result = await Post.find()
+        .sort({ date_posted: -1 })
+        .limit(resultLimit)
+        .populate({
+          path: 'user_id', // This is the field name in GifSchema that holds the reference
+          select: 'username' // Fields to include from the User collection
+          // Make sure these field names match the ones in the UserSchema
+        });
+
+        console.log(result[0]); 
         
 
-        let gifData = result.map(item => ({ gif_id: item.gif_id, title: item.title }));
+        let gifData = result.map(item => ({ gif_id: item.gif_id, title: item.title, username: item.user_id.username}));
 
         if(gifData.length >= sentResults){
             for (let i = 0; i < result.length - sentResults; i++){
@@ -51,7 +62,8 @@ exports.index = asyncHandler(async (req, res, next) => {
                     return {
                         url: result.data.images.fixed_height.url, 
                         id: result.data.id,
-                        title: gifData[i].title // Carry over the title here
+                        title: gifData[i].title,
+                        username: gifData[i].username
                     };
                 })
                 .catch(error => {
