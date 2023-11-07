@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Gif = require("../models/gif"); 
 const Post = mongoose.model('gifs',Gif.schema);
 
-const resultLimit = 50; 
+const resultLimit = 10; 
 const sentResults = 5; 
 
 function getRandomIntInRange(x, y) {
