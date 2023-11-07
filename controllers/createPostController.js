@@ -8,7 +8,6 @@ Gif = require("../models/gif");
 // GET Index Page
 exports.index = asyncHandler(async (req, res, next) => {
 
-
     res.render("gifSearch");
 });
 
@@ -74,18 +73,17 @@ exports.createPost = asyncHandler(async (req, res, next) =>{
 
     const id = req.params.query; 
 
-    const url = `${baseUrl}${id}?api_key=${apiKey}`;  // WE USING THE SEARCH ENDPOINT
+    const url = `${baseUrl}${id}?api_key=${apiKey}`; 
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        const urlsAndIds = {url: data.data.images.fixed_height.url, id: data.data.id};
+        const urlsAndIds = {url: data.data.images.fixed_height.url, id: data.data.id, gif_tags: data.data.title};
 
         res.render("createPostPage", {
             result: urlsAndIds
         })
-
     }
     catch(error){
         // Handle the error
@@ -97,31 +95,33 @@ exports.createPost = asyncHandler(async (req, res, next) =>{
 //POST post Submitted 
 exports.postCreated = asyncHandler(async (req, res, next) => {
 
-    console.log(req.user._id);
+    tags = req.body.gif_tags.split(" ");
+ 
+    let gifIndex = tags.lastIndexOf("GIF");   
+    if (gifIndex !== -1) {
+        tags = tags.slice(0, gifIndex);
+    }
+
     try {
         // Create a new Gif document from the request body
         const newGif = new Gif({
-            user_id: req.user._id, // assuming req.user is populated with the logged-in user's info
+            user_id: req.user._id, 
             gif_id: req.body.gif_id,
-            title: req.body.gif_title, // assuming title is passed in request body
-            tags: ["Some", "Hash", "tags"], // assuming tags is an array passed in request body
-            date_posted: new Date()            // Initialize other fields as needed, like likes, comments, viewers
+            title: req.body.gif_title, 
+            tags: tags, 
+            date_posted: new Date() 
         });
 
         // Save the new Gif to the database
         saveGifResult = await newGif.save();
         console.log(saveGifResult);
 
-        // Update the user's gif_posts field to include the new Gif
-        // Assuming the User model has a field `gif_posts` which is an array of ObjectIds
+
         updateUserResult = await User.updateOne(
             { _id: req.user._id }, 
             { $push: { gif_posts: newGif._id } }
         );
-        console.log(updateUserResult);
 
-
-        // Redirect to the main page after successful creation
         res.redirect("/main");
     } catch (error) {
         // Handle the error appropriately

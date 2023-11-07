@@ -9,13 +9,14 @@
     <main>
         <h1>Main Page</h1>
 
-        <% for(let i =0; i < results.length; i++) { %>
-            <div name="gif_viewer" hidden="true">
-                <img src=<%= results[i].url %> id=<%= results[i].id %> alt="">
-                <p> <%= results[i].title %></p>
-            </div>
-        <% } %>
-
+        <div id="results">
+            <% for(let i =0; i < results.length; i++) { %>
+                <div name="gif_viewer" hidden="true">
+                    <img src=<%= results[i].url %> id=<%= results[i].id %> alt="">
+                    <p name="title"> <%= results[i].title %></p>
+                </div>
+            <% } %>
+        </div>
         <button id="previous" type="button">PREVIOUS</button>
         <button id="next" type="button">NEXT</button>
 
@@ -24,8 +25,10 @@
     <footer><%- include("./partials/footer.ejs") %></footer>
 
     <script>
-        let allGifs = document.getElementsByName("gif_viewer"); 
+        let allGifs = Array.from(document.getElementsByName("gif_viewer")); 
         let activeIndex = 0; 
+
+        let TgifObject = allGifs[0].cloneNode(true);
 
         allGifs[0].removeAttribute("hidden");
 
@@ -45,9 +48,45 @@
                 allGifs[activeIndex].setAttribute("hidden", true); 
                 activeIndex++; 
                 allGifs[activeIndex].removeAttribute("hidden");
+            }else{
+                loadMore(allGifs[activeIndex].querySelector("img"));
             }
         });
 
+
+
+        function loadMore(lastGif){
+        let xhr = new XMLHttpRequest(); 
+        xhr.open("GET","?gif_id=" + lastGif.id, true); 
+        xhr.onload = function() {
+            if(this.status === 200){
+                const results = JSON.parse(this.responseText).results; 
+                let container = document.getElementById("results"); 
+                let addedGifs = []; 
+                for(let i =0; i < results.length; i++){
+
+                    const newGif = TgifObject.cloneNode(true); 
+                    newGif.setAttribute("hidden", true); 
+                    newGif.querySelector("img").setAttribute("id", results[i].id);
+                    newGif.querySelector("img").setAttribute("src", results[i].url);
+                    newGif.querySelector("p").textContent = results[i].title; 
+
+                    container.appendChild(newGif); 
+                    addedGifs.push(newGif);
+                    allGifs.push(newGif);
+                }
+                if(addedGifs.length > 0) {
+                    allGifs[activeIndex].setAttribute("hidden", true); 
+                    activeIndex++; 
+                    allGifs[activeIndex].removeAttribute("hidden");
+                }
+            }
+            else{
+                console.error("Error fetching more results" + this.status); 
+            }
+        }
+        xhr.send(); 
+    }
 
 
 

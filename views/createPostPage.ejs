@@ -3,6 +3,7 @@
     <img src=<%= result.url %> id=<%= result.id %> alt="">
     <input type="text" name="gif_title" id="gif_title" placeholder="Title..." minlength="2" maxlength="100" required="true">
     <input type="text" name="gif_id" id="gif_id" hidden="ture" value="<%= result.id %>">
+    <input type="text" name="gif_tags" id="gif_tags" hidden="ture" hidden value="<%= result.gif_tags %>">
     <button type="submit"> Post</button>
 </form>
 
